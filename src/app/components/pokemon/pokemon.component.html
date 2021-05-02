@@ -1,0 +1,4 @@
+<div *ngIf="pokemon" class="nes-container with-title is-centered">
+    <p class="title">{{ pokemon.name }} ({{ pokemon.id }})</p>
+    <p><img [src]="pokemon.sprites.front_default" /></p>
+</div>

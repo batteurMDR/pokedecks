@@ -1,0 +1,18 @@
+.pokemons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 100%;
+
+    app-pokemon {
+        width: 20%;
+        margin: 0.5em 1em;
+        transition-duration: 0.4s;
+
+        &:hover {
+            width: 22%;
+        }
+    }
+}

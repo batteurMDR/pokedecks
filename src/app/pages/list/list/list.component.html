@@ -1,0 +1,14 @@
+<app-pokemon-list [pokemons]="pokemons" (pokemonClicked)="goToPokemon($event)"></app-pokemon-list>
+<div *ngIf="!search" class="pagination">
+    <button
+        type="button"
+        class="nes-btn is-primary"
+        [class.is-disabled]="!pokeApiService.canGoPrevious"
+        (click)="goPrev()"
+    >
+        Précédent
+    </button>
+    <button type="button" class="nes-btn is-primary" [class.is-disabled]="!pokeApiService.canGoNext" (click)="goNext()">
+        Suivant
+    </button>
+</div>

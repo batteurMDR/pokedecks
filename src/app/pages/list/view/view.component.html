@@ -1,0 +1,46 @@
+<div *ngIf="pokemon" class="nes-container with-title is-centered">
+    <p class="title">{{ pokemon.name }} ({{ pokemon.weight }}g)</p>
+    <button
+        type="button"
+        class="store-btn nes-btn"
+        [class.is-success]="!isInPokedecs"
+        [class.is-error]="isInPokedecs"
+        (click)="clickOnButton()"
+    >
+        {{ isInPokedecs ? "Remove from pokedecks" : "Add to pokedecks" }}
+    </button>
+    <div class="pokemon">
+        <div class="sprites">
+            <ng-container *ngFor="let sprite of getSprites()">
+                <img [src]="sprite" *ngIf="sprite" />
+            </ng-container>
+        </div>
+        <div class="row">
+            <div class="types">
+                Types:
+                <div class="lists">
+                    <ul class="nes-list is-circle">
+                        <li *ngFor="let type of pokemon.types">{{ type.name }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="abilities">
+                Abilities:
+                <div class="lists">
+                    <ul class="nes-list is-circle">
+                        <li *ngFor="let ability of pokemon.abilities">
+                            {{ ability.name }} ({{ getAbilityDescription(ability) }})
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="stats">
+            Stats: <br />
+            <span *ngFor="let stat of pokemon.stats">{{ stat.name }} : </span>
+        </div>
+        <div class="versions">
+            Is in pokemon: <span *ngFor="let index of pokemon.game_indices">{{ index.name }}, </span>
+        </div>
+    </div>
+</div>

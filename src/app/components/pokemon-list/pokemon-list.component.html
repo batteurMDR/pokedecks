@@ -1,0 +1,7 @@
+<div class="pokemons">
+    <app-pokemon
+        *ngFor="let pokemon of pokemons"
+        [pokemon]="pokemon"
+        (click)="pokemonClicked.emit(pokemon.id)"
+    ></app-pokemon>
+</div>
