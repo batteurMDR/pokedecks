@@ -36,11 +36,24 @@
             </div>
         </div>
         <div class="stats">
-            Stats: <br />
-            <span *ngFor="let stat of pokemon.stats">{{ stat.name }} : </span>
+            Stats:
+            <app-progress [stats]="stat" *ngFor="let stat of pokemon.stats"></app-progress>
         </div>
-        <div class="versions">
-            Is in pokemon: <span *ngFor="let index of pokemon.game_indices">{{ index.name }}, </span>
+        <div class="row">
+            <div class="versions">
+                Is in pokemon: 
+                <div class="lists">
+                    <ul class="nes-list is-circle">
+                        <li *ngFor="let index of pokemon.game_indices">{{ index.name }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="evolves">
+                The Pokemon Evolves:
+                <div class="lists">
+                    <app-pokemon [pokemon]="evolve" *ngFor="let evolve of pokemon.evolve"></app-pokemon>
+                </div>
+            </div>
         </div>
     </div>
 </div>

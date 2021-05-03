@@ -21,4 +21,12 @@
             width: 50%;
         }
     }
+
+    .evolves {
+        .lists {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+    }
 }

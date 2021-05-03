@@ -25,6 +25,25 @@ export interface PokemonType {
     slot: number;
 }
 
+export interface PokemonEvolve {
+    name: string
+    sprites: {
+        back_default: string;
+        back_female: string;
+        back_shiny: string;
+        back_shiny_female: string;
+        front_default: string;
+        front_female: string;
+        front_shiny: string;
+        front_shiny_female: string;
+        other: any;
+        versions: any;
+    };
+    chain: {
+        evolution_details: any[],
+        evolves_to: any[]
+    }
+}
 export interface Pokemon {
     abilities: PokemonAbility[];
     base_experience: number;
@@ -107,17 +126,23 @@ export class PokeApiService {
                     combineLatest([...pokemon.forms.map((f) => this.http.get(f.url))]),
                     combineLatest([...pokemon.game_indices.map((gi) => this.http.get(gi.version.url))]),
                     this.http.get(pokemon.species.url),
-                    combineLatest([...pokemon.stats.map((s) => this.http.get(s.stat.url))]),
                     combineLatest([...pokemon.types.map((t) => this.http.get(t.type.url))]),
+                    this.http.get<PokemonEvolve>(`https://pokeapi.co/api/v2/evolution-chain/${pokemon.id}`).pipe(
+                        pluck('chain'),
+                        map((pokemonEvolve) => this._getAllEvolves(pokemonEvolve.evolves_to)),
+                        mergeMap((pokemonsUrls) => combineLatest([
+                            ...pokemonsUrls.map((pu) => this.http.get(`https://pokeapi.co/api/v2/pokemon/${pu.name}`))
+                        ]))
+                    ),
                 ]).pipe(
-                    map(([abilities, forms, game_indices, species, stats, types]) => ({
+                    map(([abilities, forms, game_indices, species, types, evolve]) => ({
                         ...pokemon,
                         abilities,
                         forms,
                         game_indices,
                         species,
-                        stats,
                         types,
+                        evolve
                     }))
                 )
             )
@@ -130,6 +155,17 @@ export class PokeApiService {
 
     public goPrev() {
         this._offset.next(this._offset.value - 1);
+    }
+
+    private _getAllEvolves(evolves_to) {
+        const evolves = [];
+        for (let evolve_to of evolves_to) {
+            evolves.push(evolve_to.species);
+            if (evolve_to.evolves_to.length > 0) {
+                evolves.push(...this._getAllEvolves(evolve_to.evolves_to));
+            }
+        }
+        return evolves;
     }
 
     private _getCurrentRangePokemonsFromApi() {

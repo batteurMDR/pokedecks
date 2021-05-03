@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { PokeApiService } from 'src/app/services/poke-api.service';
@@ -19,7 +19,8 @@ export class ViewComponent implements OnInit, OnDestroy {
     constructor(
         public pokeApiService: PokeApiService,
         private localStorageService: LocalStorageService,
-        private _route: ActivatedRoute
+        private _route: ActivatedRoute,
+        private _router: Router
     ) {
         if (this._route.snapshot.paramMap.get('id')) {
             this.pokemonId = this._route.snapshot.paramMap.get('id');
@@ -29,6 +30,9 @@ export class ViewComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._subscriptions.add(
             this.pokeApiService.getPokemonById(this.pokemonId).subscribe((pokemon) => {
+                // console.log(pokemon);
+                console.log(pokemon.evolve);
+                // console.log(pokemon.evolve.chain.evolves_to[0].evolves_to);
                 this.pokemon = pokemon;
             })
         );
